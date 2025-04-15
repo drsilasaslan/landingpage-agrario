@@ -21,9 +21,9 @@
       <div class="max-w-5xl mx-auto px-4 flex justify-between items-center h-16">
         <span class="font-extrabold text-lg text-teal-600">app-agrario</span>
         <div class="space-x-6">
-          <a href="#tos" class="text-gray-700 hover:text-teal-600 font-medium transition">ToS</a>
-          <a href="#privacy" class="text-gray-700 hover:text-teal-600 font-medium transition">Privacy</a>
-          <a href="#impressum" class="text-gray-700 hover:text-teal-600 font-medium transition">Impressum</a>
+          <button onclick="openLegalModal('tos')" class="text-gray-700 hover:text-teal-600 font-medium transition focus:outline-none">ToS</button>
+          <button onclick="openLegalModal('privacy')" class="text-gray-700 hover:text-teal-600 font-medium transition focus:outline-none">Privacy</button>
+          <button onclick="openLegalModal('impressum')" class="text-gray-700 hover:text-teal-600 font-medium transition focus:outline-none">Impressum</button>
         </div>
       </div>
     </nav>
@@ -81,22 +81,58 @@
       <p class="text-gray-700 mt-4">Ready? <a href="#play" class="text-teal-600 font-semibold hover:underline">Jump in and play now!</a></p>
     </section>
 
-    <!-- Legal Sections -->
-    <section id="tos" class="max-w-3xl mx-auto bg-white bg-opacity-95 rounded-2xl shadow-lg p-8 my-8 scroll-mt-24">
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Terms of Service</h2>
-      <p class="text-gray-700 text-sm">This is a sample Terms of Service for app-agrario. By playing, you agree to abide by the rules and respect other players. The game is provided as-is, without warranty. For more details, contact the site operator.</p>
-    </section>
-    <section id="privacy" class="max-w-3xl mx-auto bg-white bg-opacity-95 rounded-2xl shadow-lg p-8 my-8 scroll-mt-24">
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Privacy Policy</h2>
-      <p class="text-gray-700 text-sm">app-agrario respects your privacy. No personal data is collected beyond what is necessary for gameplay and security. No data is sold or shared with third parties. For questions, contact the site operator.</p>
-    </section>
-    <section id="impressum" class="max-w-3xl mx-auto bg-white bg-opacity-95 rounded-2xl shadow-lg p-8 my-8 scroll-mt-24">
-      <h2 class="text-xl font-bold text-gray-900 mb-2">Impressum</h2>
-      <p class="text-gray-700 text-sm">Responsible for content: [Your Name/Company]<br>Email: [your@email.com]<br>Address: [Street, City, Country]</p>
-    </section>
+    <!-- Legal Modal (hidden by default) -->
+    <div id="legal-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative">
+        <button onclick="closeLegalModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-400 text-2xl font-bold">&times;</button>
+        <div class="flex border-b mb-4">
+          <button class="tab-btn px-4 py-2 font-semibold text-teal-600 border-b-2 border-teal-500 focus:outline-none" onclick="showLegalTab('tos')" id="tab-tos">ToS</button>
+          <button class="tab-btn px-4 py-2 font-semibold text-gray-600 hover:text-teal-600 focus:outline-none" onclick="showLegalTab('privacy')" id="tab-privacy">Privacy</button>
+          <button class="tab-btn px-4 py-2 font-semibold text-gray-600 hover:text-teal-600 focus:outline-none" onclick="showLegalTab('impressum')" id="tab-impressum">Impressum</button>
+        </div>
+        <div id="legal-content-tos" class="legal-content">
+          <h2 class="text-lg font-bold mb-2">Terms of Service</h2>
+          <p class="text-gray-700 text-sm">This is a sample Terms of Service for app-agrario. By playing, you agree to abide by the rules and respect other players. The game is provided as-is, without warranty. For more details, contact the site operator.</p>
+        </div>
+        <div id="legal-content-privacy" class="legal-content hidden">
+          <h2 class="text-lg font-bold mb-2">Privacy Policy</h2>
+          <p class="text-gray-700 text-sm">app-agrario respects your privacy. No personal data is collected beyond what is necessary for gameplay and security. No data is sold or shared with third parties. For questions, contact the site operator.</p>
+        </div>
+        <div id="legal-content-impressum" class="legal-content hidden">
+          <h2 class="text-lg font-bold mb-2">Impressum</h2>
+          <p class="text-gray-700 text-sm">Responsible for content: [Your Name/Company]<br>Email: [your@email.com]<br>Address: [Street, City, Country]</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      function openLegalModal(tab) {
+        document.getElementById('legal-modal').classList.remove('hidden');
+        showLegalTab(tab || 'tos');
+      }
+      function closeLegalModal() {
+        document.getElementById('legal-modal').classList.add('hidden');
+      }
+      function showLegalTab(tab) {
+        const tabs = ['tos', 'privacy', 'impressum'];
+        tabs.forEach(t => {
+          document.getElementById('legal-content-' + t).classList.add('hidden');
+          document.getElementById('tab-' + t).classList.remove('text-teal-600', 'border-teal-500', 'border-b-2');
+          document.getElementById('tab-' + t).classList.add('text-gray-600');
+        });
+        document.getElementById('legal-content-' + tab).classList.remove('hidden');
+        document.getElementById('tab-' + tab).classList.add('text-teal-600', 'border-teal-500', 'border-b-2');
+        document.getElementById('tab-' + tab).classList.remove('text-gray-600');
+      }
+      window.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') closeLegalModal();
+      });
+    </script>
     <!-- Footer -->
     <footer class="mt-auto py-6 bg-gradient-to-r from-teal-500 via-yellow-400 to-orange-400 text-white text-center rounded-t-2xl shadow-inner">
-      <p class="mb-1">&copy; 2025 app-agrario. MIT License.</p>
+      <div class="flex flex-col md:flex-row items-center justify-center gap-2">
+        <p class="mb-1">&copy; 2025 app-agrario. MIT License.</p>
+        <button onclick="openLegalModal()" class="ml-0 md:ml-4 underline text-white hover:text-yellow-200 font-medium transition">Legal Notice</button>
+      </div>
       <p class="text-xs">Inspired by classic .io games. Made with <span class="text-red-400">&#10084;</span></p>
     </footer>
   </body>
